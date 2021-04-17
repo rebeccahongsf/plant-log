@@ -25,7 +25,11 @@ const RegisterScreen = (props) => {
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         <Icon style={styles.icon} name="ios-person" size={25} color="#4F8EF7" />
-        <TextInput placeholder="name" onChangeText={(name) => setName(name)} />
+        <TextInput
+          placeholder="name"
+          onChangeText={(name) => setName(name)}
+          style={styles.inputText}
+        />
       </View>
       <View style={styles.inputContainer}>
         <Icon style={styles.icon} name="ios-mail" size={25} color="#4F8EF7" />
@@ -65,6 +69,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     fontSize: 16,
+    width: '100%',
   },
   button: {
     backgroundColor: '#ccc',

@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     fontSize: 16,
+    width: '100%',
   },
   button: {
     backgroundColor: '#ccc',
