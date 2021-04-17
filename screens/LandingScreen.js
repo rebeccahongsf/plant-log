@@ -1,16 +1,14 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import Login from '../components/Login';
 
 export default function LandingScreen({ navigation }) {
   return (
     <View style={styles.container}>
+      <Text style={styles.heading}>Plant Log</Text>
+      <Login />
       <Button
-        title="Login"
-        onPress={() => navigation.navigate('Login')}
-        style={styles.button}
-      />
-      <Button
-        title="Register"
+        title="Don't have an account? Sign up now!"
         onPress={() => navigation.navigate('Register')}
         style={styles.button}
       />
@@ -25,5 +23,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
   },
-  button: {},
+  heading: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  subtext: {
+    fontSize: 16,
+    color: '#ccc',
+    textAlign: 'center',
+  },
 });
