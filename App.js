@@ -1,13 +1,70 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
+import * as firebase from 'firebase';
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: 'AIzaSyA9yiVLWfMI06ZHhVFLaE4ajXOjI42MYdE',
+  authDomain: 'plant-log-57646.firebaseapp.com',
+  projectId: 'plant-log-57646',
+  storageBucket: 'plant-log-57646.appspot.com',
+  messagingSenderId: '773172521277',
+  appId: '1:773172521277:web:d1bf579160747246e53d54',
+  measurementId: 'G-CM0S36C2EB',
+};
+
+// Check if firebase is already initialized, if not, initialize firebaseConfig
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 import PlantDashboardScreen from './screens/PlantDashboardScreen';
+import LandingScreen from './screens/LandingScreen';
+import RegisterScreen from './screens/RegisterScreen';
 
 const Stack = createStackNavigator();
 
-export default function App() {
+const onAuthStateChange = (callback) => {
+  return firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      callback({ loggedIn: true });
+    } else {
+      callback({ loggedIn: false });
+    }
+  });
+};
+
+const App = () => {
+  const [user, setUser] = useState({ loggedIn: false });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChange(setUser);
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  if (!user.loggedIn) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Landing">
+          <Stack.Screen
+            name="Landing"
+            component={LandingScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Dashboard" component={PlantDashboardScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Dashboard">
@@ -15,13 +72,6 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
