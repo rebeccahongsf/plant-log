@@ -10,7 +10,7 @@ const logout = () => {
   firebase.auth().signOut();
 };
 
-export default function PlantDashboardScreen() {
+export default function PlantDashboardScreen({ navigation }) {
   const requestLogout = useCallback(() => {
     logout();
   }, []);
@@ -18,6 +18,10 @@ export default function PlantDashboardScreen() {
   return (
     <View style={{ width: '100%', height: '100%', backgroundColor: '#fff' }}>
       <Button title="logout" onPress={() => requestLogout()} />
+      <Button
+        title="Add Plant"
+        onPress={() => navigation.navigate('AddPlant')}
+      />
       <FlatList
         data={plants}
         renderItem={({ item }) => <PlantCardItem plant={item} />}

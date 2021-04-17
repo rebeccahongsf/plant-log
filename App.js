@@ -26,6 +26,7 @@ import PlantDashboardScreen from './screens/PlantDashboardScreen';
 import LandingScreen from './screens/LandingScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import LoginScreen from './screens/LoginScreen';
+import AddPlantScreen from './screens/AddPlantScreen';
 
 const Stack = createStackNavigator();
 
@@ -61,7 +62,6 @@ const App = () => {
           />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="Dashboard" component={PlantDashboardScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -71,6 +71,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Dashboard">
         <Stack.Screen name="Dashboard" component={PlantDashboardScreen} />
+        <Stack.Screen name="AddPlant" component={AddPlantScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
