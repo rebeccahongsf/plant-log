@@ -25,6 +25,7 @@ if (firebase.apps.length === 0) {
 import PlantDashboardScreen from './screens/PlantDashboardScreen';
 import LandingScreen from './screens/LandingScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import LoginScreen from './screens/LoginScreen';
 
 const Stack = createStackNavigator();
 
@@ -58,6 +59,7 @@ const App = () => {
             component={LandingScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Dashboard" component={PlantDashboardScreen} />
         </Stack.Navigator>
