@@ -6,7 +6,7 @@ const LoginScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onSignUp = () => {
+  const onLogin = () => {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -14,9 +14,10 @@ const LoginScreen = (props) => {
         console.log(result);
       })
       .catch((error) => {
+        alert('Login error, check logs!');
         console.log(error);
       });
-    alert('Signup completed!');
+    alert('Login completed!');
   };
 
   return (
@@ -31,7 +32,7 @@ const LoginScreen = (props) => {
         secureTextEntry={true}
         onChangeText={(password) => setPassword(password)}
       />
-      <Button onPress={() => onSignUp()} title="Sign Up" />
+      <Button onPress={() => onLogin()} title="Login" />
     </View>
   );
 };
