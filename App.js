@@ -5,11 +5,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: 'AIzaSyA9yiVLWfMI06ZHhVFLaE4ajXOjI42MYdE',
   authDomain: 'plant-log-57646.firebaseapp.com',
+  databaseURL: 'https://plant-log-57646.firebaseio.com',
   projectId: 'plant-log-57646',
   storageBucket: 'plant-log-57646.appspot.com',
   messagingSenderId: '773172521277',
