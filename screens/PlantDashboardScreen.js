@@ -1,5 +1,6 @@
 import firebase from 'firebase';
-import React, { useCallback } from 'react';
+import 'firebase/firestore';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Button } from 'react-native';
 import PlantCardItem from '../components/PlantCardItem';
 
@@ -11,8 +12,26 @@ const logout = () => {
 };
 
 export default function PlantDashboardScreen({ navigation }) {
+  const [plants, setPlant] = useState([]);
+
   const requestLogout = useCallback(() => {
     logout();
+  }, []);
+
+  useEffect(() => {
+    const fetchPlants = async () => {
+      const response = await firebase
+        .firestore()
+        .collection('plants')
+        .get()
+        .then((querySnapshot) => {
+          setPlant(querySnapshot.docs.map((doc) => doc.data()));
+        });
+
+      console.log('got the data!');
+      console.log(data); // array of plants object
+    };
+    fetchPlants();
   }, []);
 
   return (
@@ -25,7 +44,7 @@ export default function PlantDashboardScreen({ navigation }) {
       <FlatList
         data={plants}
         renderItem={({ item }) => <PlantCardItem plant={item} />}
-        keyExtractor={(item) => item.id}
+        // keyExtractor={(item) => item.id}
       />
     </View>
   );
