@@ -11,7 +11,6 @@ const PlantCardItem = (props) => {
   const onClick = () => {
     navigation.navigate('PlantDetail', {
       id: plant.id,
-      name: plant.name,
     });
   };
 

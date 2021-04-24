@@ -33,6 +33,9 @@ export default function AddLogScreen({ navigation }) {
       .catch((error) => {
         console.log('Error getting document: ', error);
       });
+    navigation.navigate('PlantDetail', {
+      id: route.params.id,
+    });
   };
 
   return (
