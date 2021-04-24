@@ -29,7 +29,13 @@ export default function PlantDashboardScreen({ navigation }) {
         .collection('plants')
         .get()
         .then((querySnapshot) => {
-          setPlants(querySnapshot.docs.map((doc) => doc.data()));
+          setPlants(
+            querySnapshot.docs.map((doc) => {
+              const data = doc.data();
+              const id = doc.id;
+              return { id, ...data };
+            })
+          );
           console.log('got the plant data!');
         });
       console.log(plants);

@@ -46,7 +46,10 @@ export default function AddPlantScreen({ navigation }) {
         location: location.value,
       })
       .then(() => {
-        console.log('Plant added!');
+        console.log('Plant completed!');
+      })
+      .catch((error) => {
+        console.log('Error getting document: ', error);
       });
     navigation.navigate('Dashboard');
   };
