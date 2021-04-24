@@ -12,7 +12,9 @@ const logout = () => {
 };
 
 export default function PlantDashboardScreen({ navigation }) {
-  const [plants, setPlant] = useState([]);
+  const [plants, setPlants] = useState([]);
+  const [user, setUser] = useState();
+  const { uid } = firebase.auth().currentUser;
 
   const requestLogout = useCallback(() => {
     logout();
@@ -22,14 +24,15 @@ export default function PlantDashboardScreen({ navigation }) {
     const fetchPlants = async () => {
       const response = await firebase
         .firestore()
+        .collection('users')
+        .doc(uid)
         .collection('plants')
         .get()
         .then((querySnapshot) => {
-          setPlant(querySnapshot.docs.map((doc) => doc.data()));
+          setPlants(querySnapshot.docs.map((doc) => doc.data()));
+          console.log('got the plant data!');
         });
-
-      console.log('got the data!');
-      console.log(data); // array of plants object
+      console.log(plants);
     };
     fetchPlants();
   }, []);
@@ -44,7 +47,7 @@ export default function PlantDashboardScreen({ navigation }) {
       <FlatList
         data={plants}
         renderItem={({ item }) => <PlantCardItem plant={item} />}
-        // keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id}
       />
     </View>
   );

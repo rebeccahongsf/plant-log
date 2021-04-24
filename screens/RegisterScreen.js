@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import 'firebase/firestore';
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -12,13 +13,16 @@ const RegisterScreen = (props) => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        console.log(result);
+      .then((cred) => {
+        firebase.firestore().collection('users').doc(cred.user.uid).set({
+          name,
+          email,
+        });
+        alert('Signup completed!');
       })
       .catch((error) => {
         console.log(error);
       });
-    alert('Signup completed!');
   };
 
   return (

@@ -10,6 +10,8 @@ export default function AddPlantScreen({ navigation }) {
   const [frequency, setFrequency] = useState('');
   const [duration, setDuration] = useState();
   const [location, setLocation] = useState();
+  const [user, setUser] = useState();
+  const { uid } = firebase.auth().currentUser;
 
   const locationOptions = [
     { label: 'Bedroom', value: 'bedroom' },
@@ -32,6 +34,8 @@ export default function AddPlantScreen({ navigation }) {
     alert('submit!');
     firebase
       .firestore()
+      .collection('users')
+      .doc(uid)
       .collection('plants')
       .doc()
       .set({
@@ -42,7 +46,7 @@ export default function AddPlantScreen({ navigation }) {
         location: location.value,
       })
       .then(() => {
-        console.log('User added!');
+        console.log('Plant added!');
       });
     navigation.navigate('Dashboard');
   };
