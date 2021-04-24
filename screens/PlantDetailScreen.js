@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, Button } from 'react-native';
 import firebase from 'firebase';
 import 'firebase/firestore';
+import LogCardItem from '../components/LogCardItem';
 
-export default function PlantDetailScreen() {
+export default function PlantDetailScreen({ navigation }) {
   const route = useRoute();
-  console.log(route.params);
+  // console.log(route.params);
 
   const [plantDetail, setPlantDetail] = useState([]);
   const [user, setUser] = useState();
@@ -38,7 +39,16 @@ export default function PlantDetailScreen() {
       <Text>
         Water every {plantDetail.frequency} {plantDetail.duration}
       </Text>
-      <FlatList />
+      {/* <FlatList /> */}
+      <Button
+        title="Add Log"
+        onPress={() =>
+          navigation.navigate('AddLog', {
+            id: route.params.id,
+          })
+        }
+      />
+      <LogCardItem />
     </View>
   );
 }
