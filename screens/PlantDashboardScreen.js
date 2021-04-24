@@ -13,7 +13,6 @@ const logout = () => {
 
 export default function PlantDashboardScreen({ navigation }) {
   const [plants, setPlants] = useState([]);
-  const [user, setUser] = useState();
   const { uid } = firebase.auth().currentUser;
 
   const requestLogout = useCallback(() => {

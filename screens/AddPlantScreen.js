@@ -8,8 +8,8 @@ export default function AddPlantScreen({ navigation }) {
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [frequency, setFrequency] = useState('');
-  const [duration, setDuration] = useState();
-  const [location, setLocation] = useState();
+  const [duration, setDuration] = useState('');
+  const [location, setLocation] = useState('');
   const [user, setUser] = useState();
   const { uid } = firebase.auth().currentUser;
 

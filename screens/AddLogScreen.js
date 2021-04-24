@@ -10,7 +10,6 @@ export default function AddLogScreen({ navigation }) {
 
   const [date, setDate] = useState(Date.now());
   const [note, setNote] = useState('');
-  const [user, setUser] = useState();
   const { uid } = firebase.auth().currentUser;
 
   const submitForm = () => {
