@@ -10,6 +10,7 @@ export default function PlantDetailScreen({ navigation }) {
   // console.log(route.params);
 
   const [plantDetail, setPlantDetail] = useState([]);
+  const [plantLog, setPlantLog] = useState([]);
   const [user, setUser] = useState();
   const { uid } = firebase.auth().currentUser;
 
@@ -26,9 +27,30 @@ export default function PlantDetailScreen({ navigation }) {
           setPlantDetail(documentSnapshot.data());
           console.log('got the plant details data!');
         });
-      console.log(plantDetail);
+    };
+
+    const fetchPlantLog = async () => {
+      const response = await firebase
+        .firestore()
+        .collection('users')
+        .doc(uid)
+        .collection('plants')
+        .doc(route.params.id)
+        .collection('logs')
+        .get()
+        .then((querySnapshot) => {
+          setPlantLog(
+            querySnapshot.docs.map((doc) => {
+              const data = doc.data();
+              const id = doc.id;
+              return { id, ...data };
+            })
+          );
+          console.log(plantLog);
+        });
     };
     fetchPlantDetail();
+    fetchPlantLog();
   }, []);
 
   return (
@@ -48,7 +70,12 @@ export default function PlantDetailScreen({ navigation }) {
           })
         }
       />
-      <LogCardItem />
+      <FlatList
+        data={plantLog}
+        renderItem={({ item }) => <LogCardItem log={item} />}
+        keyExtractor={(item) => item.id}
+      />
+      {/* <LogCardItem /> */}
     </View>
   );
 }

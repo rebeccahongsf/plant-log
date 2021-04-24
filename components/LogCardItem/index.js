@@ -6,10 +6,16 @@ import styles from './styles';
 const LogCardItem = (props) => {
   const { log } = props;
 
+  var date = new Date(log.date).toLocaleDateString('en', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
   return (
     <View>
-      <Text>Date</Text>
-      <Text>Notes</Text>
+      <Text>{date}</Text>
+      <Text>{log.note}</Text>
     </View>
   );
 };
