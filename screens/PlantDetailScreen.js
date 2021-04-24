@@ -51,7 +51,7 @@ export default function PlantDetailScreen({ navigation }) {
     };
     fetchPlantDetail();
     fetchPlantLog();
-  }, []);
+  }, [plantLog]);
 
   return (
     <View>

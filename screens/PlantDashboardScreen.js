@@ -41,7 +41,7 @@ export default function PlantDashboardScreen({ navigation }) {
       console.log(plants);
     };
     fetchPlants();
-  }, []);
+  }, [plants]);
 
   return (
     <View style={{ width: '100%', height: '100%', backgroundColor: '#fff' }}>
