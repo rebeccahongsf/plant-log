@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Button } from 'react-native';
 import PlantCardItem from '../components/PlantCardItem';
 
-import plants from '../data/Plants';
+// import plants from '../data/Plants';
 import { FlatList } from 'react-native-gesture-handler';
 
 const logout = () => {
@@ -19,28 +19,28 @@ export default function PlantDashboardScreen({ navigation }) {
     logout();
   }, []);
 
-  useEffect(() => {
-    const fetchPlants = async () => {
-      const response = await firebase
-        .firestore()
-        .collection('users')
-        .doc(uid)
-        .collection('plants')
-        .get()
-        .then((querySnapshot) => {
-          setPlants(
-            querySnapshot.docs.map((doc) => {
-              const data = doc.data();
-              const id = doc.id;
-              return { id, ...data };
-            })
-          );
-          console.log('got the plant data!');
+  const fetchPlants = async () => {
+    const response = await firebase
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('plants')
+      .onSnapshot((snapshot) => {
+        let changes = snapshot.docChanges();
+        console.log(changes);
+        changes.docs.map((doc) => {
+          const data = doc.data();
+          const id = doc.id;
+          setPlants([id, ...data]);
         });
-      console.log(plants);
-    };
+        console.log('got the plant data for dash!');
+      });
+    console.log(plants);
+  };
+
+  useEffect(() => {
     fetchPlants();
-  }, [plants]);
+  }, []);
 
   return (
     <View style={{ width: '100%', height: '100%', backgroundColor: '#fff' }}>
