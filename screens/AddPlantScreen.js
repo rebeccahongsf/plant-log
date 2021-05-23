@@ -98,7 +98,8 @@ export default function AddPlantScreen({ navigation }) {
         new Date().toLocaleDateString('en').replaceAll('/', '-')
     );
 
-    console.log(imageRef.fullPath);
+    const imagePath = await imageRef.getDownloadURL();
+    setImagePath(imagePath);
 
     return imageRef.put(blob).then((snapshot) => {
       console.log('Uploaded a blob or file!');
