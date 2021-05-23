@@ -11,10 +11,9 @@ export default function AddPlantScreen({ navigation }) {
   const [frequency, setFrequency] = useState('');
   const [duration, setDuration] = useState('');
   const [location, setLocation] = useState('');
-  const [user, setUser] = useState();
-  const { uid } = firebase.auth().currentUser;
   const [selectedImage, setSelectedImage] = React.useState(null);
   const [imagePath, setImagePath] = useState('');
+  const { uid } = firebase.auth().currentUser;
 
   const locationOptions = [
     { label: 'Bedroom', value: 'bedroom' },
@@ -62,6 +61,11 @@ export default function AddPlantScreen({ navigation }) {
     let permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
+    if (!name) {
+      alert('Please fill in plant name first!');
+      return;
+    }
+
     if (permissionResult.granted === false) {
       alert('Permission to access camera roll is required!');
       return;
@@ -85,7 +89,14 @@ export default function AddPlantScreen({ navigation }) {
 
     var ref = firebase.storage().ref();
 
-    var imageRef = ref.child('images/' + uri);
+    var imageRef = ref.child(
+      'images/' +
+        uid +
+        '/' +
+        name +
+        '/' +
+        new Date().toLocaleDateString('en').replaceAll('/', '-')
+    );
 
     console.log(imageRef.fullPath);
 
