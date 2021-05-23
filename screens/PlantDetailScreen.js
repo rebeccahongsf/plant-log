@@ -14,40 +14,41 @@ export default function PlantDetailScreen({ navigation }) {
   const [user, setUser] = useState();
   const { uid } = firebase.auth().currentUser;
 
-  const fetchPlantDetail = async () => {
-    const response = await firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('plants')
-      .doc(route.params.id)
-      .get()
-      .then((documentSnapshot) => {
-        setPlantDetail(documentSnapshot.data());
-        console.log('got the plant details data!');
-      });
-  };
-
-  const fetchPlantLog = async () => {
-    const response = await firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('plants')
-      .doc(route.params.id)
-      .collection('logs')
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          const id = doc.id;
-          setPlantLog([id, ...data]);
-        });
-        console.log(plantLog);
-      });
-  };
-
   useEffect(() => {
+    const fetchPlantDetail = async () => {
+      const response = await firebase
+        .firestore()
+        .collection('users')
+        .doc(uid)
+        .collection('plants')
+        .doc(route.params.id)
+        .get()
+        .then((documentSnapshot) => {
+          setPlantDetail(documentSnapshot.data());
+          console.log('got the plant details data!');
+        });
+    };
+
+    const fetchPlantLog = async () => {
+      const response = await firebase
+        .firestore()
+        .collection('users')
+        .doc(uid)
+        .collection('plants')
+        .doc(route.params.id)
+        .collection('logs')
+        .get()
+        .then((querySnapshot) => {
+          setPlantLog(
+            querySnapshot.docs.map((doc) => {
+              const data = doc.data();
+              const id = doc.id;
+              return { id, ...data };
+            })
+          );
+          console.log(plantLog);
+        });
+    };
     fetchPlantDetail();
     fetchPlantLog();
   }, []);
@@ -60,7 +61,6 @@ export default function PlantDetailScreen({ navigation }) {
       <Text>
         Water every {plantDetail.frequency} {plantDetail.duration}
       </Text>
-      {/* <FlatList /> */}
       <Button
         title="Add Log"
         onPress={() =>
@@ -74,7 +74,6 @@ export default function PlantDetailScreen({ navigation }) {
         renderItem={({ item }) => <LogCardItem log={item} />}
         keyExtractor={(item) => item.id}
       />
-      {/* <LogCardItem /> */}
     </View>
   );
 }

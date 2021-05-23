@@ -19,26 +19,26 @@ export default function PlantDashboardScreen({ navigation }) {
     logout();
   }, []);
 
-  const fetchPlants = async () => {
-    const response = await firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('plants')
-      .onSnapshot((snapshot) => {
-        let changes = snapshot.docChanges();
-        console.log(changes);
-        changes.docs.map((doc) => {
-          const data = doc.data();
-          const id = doc.id;
-          setPlants([id, ...data]);
-        });
-        console.log('got the plant data for dash!');
-      });
-    console.log(plants);
-  };
-
   useEffect(() => {
+    const fetchPlants = async () => {
+      const response = await firebase
+        .firestore()
+        .collection('users')
+        .doc(uid)
+        .collection('plants')
+        .get()
+        .then((querySnapshot) => {
+          setPlants(
+            querySnapshot.docs.map((doc) => {
+              const data = doc.data();
+              const id = doc.id;
+              return { id, ...data };
+            })
+          );
+          console.log('got the plant data!');
+        });
+      console.log(plants);
+    };
     fetchPlants();
   }, []);
 

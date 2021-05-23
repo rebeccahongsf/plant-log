@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import { Picker } from 'react-native-woodpicker';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function AddPlantScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -12,6 +13,8 @@ export default function AddPlantScreen({ navigation }) {
   const [location, setLocation] = useState('');
   const [user, setUser] = useState();
   const { uid } = firebase.auth().currentUser;
+  const [selectedImage, setSelectedImage] = React.useState(null);
+  const [imagePath, setImagePath] = useState('');
 
   const locationOptions = [
     { label: 'Bedroom', value: 'bedroom' },
@@ -44,6 +47,7 @@ export default function AddPlantScreen({ navigation }) {
         frequency,
         duration: duration.value,
         location: location.value,
+        imageUri: imagePath,
       })
       .then(() => {
         console.log('Plant completed!');
@@ -52,6 +56,42 @@ export default function AddPlantScreen({ navigation }) {
         console.log('Error getting document: ', error);
       });
     navigation.navigate('Dashboard');
+  };
+
+  let openImagePickerAsync = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert('Permission to access camera roll is required!');
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+
+    setSelectedImage(pickerResult.uri);
+    console.log(selectedImage);
+    uploadImage(selectedImage);
+  };
+
+  const uploadImage = async (uri) => {
+    console.log('URI:' + uri);
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    var ref = firebase.storage().ref();
+
+    var imageRef = ref.child('images/' + uri);
+
+    console.log(imageRef.fullPath);
+
+    return imageRef.put(blob).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
+    });
   };
 
   return (
@@ -105,6 +145,11 @@ export default function AddPlantScreen({ navigation }) {
           style={styles.pickerInput}
         />
       </View>
+      <Button
+        onPress={openImagePickerAsync}
+        title="Pick a photo"
+        style={styles.button}
+      />
       <View style={styles.button}>
         <Button onPress={() => submitForm()} title="Done" color="#fff" />
       </View>
@@ -163,5 +208,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 15,
     minWidth: 100,
+  },
+  thumbnail: {
+    width: 300,
+    height: 300,
+    resizeMode: 'contain',
   },
 });
