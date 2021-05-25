@@ -72,39 +72,39 @@ export default function AddPlantScreen({ navigation }) {
     }
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    console.log('Picking...');
 
     if (pickerResult.cancelled === true) {
       return;
     }
 
     setSelectedImage(pickerResult.uri);
-    console.log(selectedImage);
-    uploadImage(selectedImage);
   };
 
   const uploadImage = async (uri) => {
-    console.log('URI:' + uri);
     const response = await fetch(uri);
     const blob = await response.blob();
-
-    var ref = firebase.storage().ref();
-
-    var imageRef = ref.child(
-      'images/' +
-        uid +
-        '/' +
-        name +
-        '/' +
-        new Date().toLocaleDateString('en').replaceAll('/', '-')
-    );
+    var imageRef = firebase
+      .storage()
+      .ref()
+      .child(
+        'images/' +
+          uid +
+          '/' +
+          name +
+          '/' +
+          new Date().toLocaleDateString('en').replaceAll('/', '-')
+      );
 
     const imagePath = await imageRef.getDownloadURL();
-    setImagePath(imagePath);
-
-    return imageRef.put(blob).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-    });
+    await setImagePath(imagePath);
+    // console.log(`image path: ${imagePath}`);
+    return await imageRef.put(blob);
   };
+
+  if (selectedImage !== null) {
+    uploadImage(selectedImage);
+  }
 
   return (
     <View style={styles.container}>
@@ -157,11 +157,17 @@ export default function AddPlantScreen({ navigation }) {
           style={styles.pickerInput}
         />
       </View>
-      <Button
-        onPress={openImagePickerAsync}
-        title="Pick a photo"
-        style={styles.button}
-      />
+      <View style={styles.container}>
+        {selectedImage === null ? (
+          <Button
+            onPress={openImagePickerAsync}
+            title="Pick a photo"
+            style={styles.button}
+          />
+        ) : (
+          <Image source={{ uri: selectedImage }} style={styles.thumbnail} />
+        )}
+      </View>
       <View style={styles.button}>
         <Button onPress={() => submitForm()} title="Done" color="#fff" />
       </View>
@@ -222,8 +228,8 @@ const styles = StyleSheet.create({
     minWidth: 100,
   },
   thumbnail: {
-    width: 300,
-    height: 300,
+    width: 250,
+    height: 250,
     resizeMode: 'contain',
   },
 });
