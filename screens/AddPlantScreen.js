@@ -13,7 +13,7 @@ export default function AddPlantScreen({ navigation }) {
   const [duration, setDuration] = useState('');
   const [location, setLocation] = useState('');
   const [selectedImage, setSelectedImage] = React.useState(null);
-  const [imagePath, setImagePath] = useState('');
+  const [imageUri, setImageUri] = useState('');
   const { uid } = firebase.auth().currentUser;
 
   const locationOptions = [
@@ -33,8 +33,24 @@ export default function AddPlantScreen({ navigation }) {
     { label: 'Weeks', value: 'weeks' },
   ];
 
+  const imageRef = firebase
+    .storage()
+    .ref()
+    .child(
+      'images/' +
+        uid +
+        '/' +
+        name +
+        '/' +
+        new Date()
+          .toLocaleDateString('en')
+          .replaceAll('/', '-')
+          .concat('-' + uuidv4())
+    );
+
   const submitForm = () => {
     alert('submit!');
+
     firebase
       .firestore()
       .collection('users')
@@ -47,7 +63,7 @@ export default function AddPlantScreen({ navigation }) {
         frequency,
         duration: duration.value,
         location: location.value,
-        imageUri: imagePath,
+        imageUri,
       })
       .then(() => {
         console.log('Plant completed!');
@@ -80,36 +96,24 @@ export default function AddPlantScreen({ navigation }) {
     }
 
     setSelectedImage(pickerResult.uri);
+    uploadImage(pickerResult.uri);
   };
 
   const uploadImage = async (uri) => {
     console.log('uploading image!');
     const response = await fetch(uri);
     const blob = await response.blob();
-    var imageRef = firebase
-      .storage()
-      .ref()
-      .child(
-        'images/' +
-          uid +
-          '/' +
-          name +
-          '/' +
-          new Date()
-            .toLocaleDateString('en')
-            .replaceAll('/', '-')
-            .concat('-' + uuidv4())
-      );
-
-    const imagePath = await imageRef.getDownloadURL();
-    await setImagePath(imagePath);
-    await console.log(`image path: ${imagePath}`);
-    return await imageRef.put(blob);
+    const snapshot = await imageRef.put(blob);
+    await snapshot.ref.getDownloadURL().then((url) => {
+      console.log(url);
+      setImageUri(url);
+    });
+    return;
   };
 
-  if (selectedImage !== null) {
-    uploadImage(selectedImage);
-  }
+  // if (selectedImage !== null) {
+  //   uploadImage(selectedImage);
+  // }
 
   return (
     <View style={styles.container}>
