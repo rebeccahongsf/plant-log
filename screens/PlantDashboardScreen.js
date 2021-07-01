@@ -53,6 +53,7 @@ export default function PlantDashboardScreen({ navigation }) {
         data={plants}
         renderItem={({ item }) => <PlantCardItem plant={item} />}
         keyExtractor={(item) => item.id}
+        numColumns={2}
       />
     </View>
   );

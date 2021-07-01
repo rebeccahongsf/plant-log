@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
-import { View, Text, FlatList, Button } from 'react-native';
+import { View, Text, FlatList, Button, Image, StyleSheet } from 'react-native';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import LogCardItem from '../components/LogCardItem';
@@ -11,7 +11,6 @@ export default function PlantDetailScreen({ navigation }) {
 
   const [plantDetail, setPlantDetail] = useState([]);
   const [plantLog, setPlantLog] = useState([]);
-  const [user, setUser] = useState();
   const { uid } = firebase.auth().currentUser;
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export default function PlantDetailScreen({ navigation }) {
         .get()
         .then((documentSnapshot) => {
           setPlantDetail(documentSnapshot.data());
-          console.log('got the plant details data!');
+          console.log('got the plant details data: ' + plantDetail);
         });
     };
 
@@ -54,11 +53,20 @@ export default function PlantDetailScreen({ navigation }) {
   }, []);
 
   return (
-    <View>
-      <Text>{plantDetail.name}</Text>
-      <Text>{plantDetail.type}</Text>
-      <Text>{plantDetail.location}</Text>
-      <Text>
+    <View style={styles.container}>
+      {plantDetail.imageUri ? (
+        <View>
+          <Image
+            source={{
+              uri: plantDetail.imageUri,
+            }}
+            style={styles.avatar}
+          />
+        </View>
+      ) : null}
+      <Text style={styles.name}>{plantDetail.name}</Text>
+      <Text style={styles.type}>{plantDetail.type}</Text>
+      <Text style={styles.date}>
         Water every {plantDetail.frequency} {plantDetail.duration}
       </Text>
       <Button
@@ -77,3 +85,31 @@ export default function PlantDetailScreen({ navigation }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 30,
+  },
+  avatar: {
+    width: '100%',
+    height: 250,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  name: {
+    fontWeight: 'bold',
+    fontSize: 22,
+  },
+  type: {
+    fontStyle: 'italic',
+  },
+  date: {
+    fontSize: 14,
+    color: 'grey',
+  },
+  button: {
+    backgroundColor: '#ccc',
+    padding: 5,
+    width: '100%',
+  },
+});

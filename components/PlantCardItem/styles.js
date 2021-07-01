@@ -5,7 +5,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#fff',
-    padding: 25,
     margin: 10,
     borderWidth: 1,
     borderRadius: 10,
@@ -17,14 +16,15 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   leftContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
+    padding: 25,
   },
   midContainer: {
     paddingLeft: 5,
     justifyContent: 'space-around',
   },
   avatar: {
-    width: 100,
+    width: '100%',
     height: 100,
     borderRadius: 10,
     marginRight: 10,

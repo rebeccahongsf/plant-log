@@ -18,12 +18,14 @@ const PlantCardItem = (props) => {
     <TouchableWithoutFeedback onPress={onClick}>
       <View style={styles.container}>
         <View style={styles.leftContainer}>
-          <Image
-            source={{
-              uri: plant.imageUri,
-            }}
-            style={styles.avatar}
-          />
+          {plant.imageUri ? (
+            <Image
+              source={{
+                uri: plant.imageUri,
+              }}
+              style={styles.avatar}
+            />
+          ) : null}
           <View style={styles.midContainer}>
             <Text style={styles.name}>{plant.name}</Text>
             <Text style={styles.type}>{plant.type}</Text>

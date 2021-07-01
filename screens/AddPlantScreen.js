@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 import { Picker } from 'react-native-woodpicker';
 import * as ImagePicker from 'expo-image-picker';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddPlantScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -82,6 +83,7 @@ export default function AddPlantScreen({ navigation }) {
   };
 
   const uploadImage = async (uri) => {
+    console.log('uploading image!');
     const response = await fetch(uri);
     const blob = await response.blob();
     var imageRef = firebase
@@ -93,12 +95,15 @@ export default function AddPlantScreen({ navigation }) {
           '/' +
           name +
           '/' +
-          new Date().toLocaleDateString('en').replaceAll('/', '-')
+          new Date()
+            .toLocaleDateString('en')
+            .replaceAll('/', '-')
+            .concat('-' + uuidv4())
       );
 
     const imagePath = await imageRef.getDownloadURL();
     await setImagePath(imagePath);
-    // console.log(`image path: ${imagePath}`);
+    await console.log(`image path: ${imagePath}`);
     return await imageRef.put(blob);
   };
 
