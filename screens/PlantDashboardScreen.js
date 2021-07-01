@@ -19,28 +19,41 @@ export default function PlantDashboardScreen({ navigation }) {
     logout();
   }, []);
 
+  const fetchPlants = () => {
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('plants')
+      .get()
+      .then((querySnapshot) => {
+        setPlants(
+          querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+            const id = doc.id;
+            return { id, ...data };
+          })
+        );
+        console.log('got the plant data!');
+      });
+    console.log(plants);
+  };
+
   useEffect(() => {
-    const fetchPlants = async () => {
-      const response = await firebase
-        .firestore()
-        .collection('users')
-        .doc(uid)
-        .collection('plants')
-        .get()
-        .then((querySnapshot) => {
-          setPlants(
-            querySnapshot.docs.map((doc) => {
-              const data = doc.data();
-              const id = doc.id;
-              return { id, ...data };
-            })
-          );
-          console.log('got the plant data!');
-        });
-      console.log(plants);
+    const unsubscribe = firebase
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('plants')
+      .onSnapshot((snapshot) => {
+        if (snapshot.size) {
+          fetchPlants();
+        }
+      });
+    return () => {
+      unsubscribe();
     };
-    fetchPlants();
-  }, []);
+  }, [firebase]);
 
   return (
     <View style={{ width: '100%', height: '100%', backgroundColor: '#fff' }}>
