@@ -17,7 +17,7 @@ const PlantCardItem = (props) => {
   return (
     <TouchableWithoutFeedback onPress={onClick}>
       <View style={styles.container}>
-        <View style={styles.leftContainer}>
+        <View style={styles.imageContainer}>
           {plant.imageUri ? (
             <Image
               source={{
@@ -26,13 +26,9 @@ const PlantCardItem = (props) => {
               style={styles.avatar}
             />
           ) : null}
-          <View style={styles.midContainer}>
-            <Text style={styles.name}>{plant.name}</Text>
-            <Text style={styles.type}>{plant.type}</Text>
-            <Text style={styles.date}>
-              Water every {plant.frequency} {plant.duration}
-            </Text>
-          </View>
+        </View>
+        <View style={styles.detailsContainer}>
+          <Text style={styles.name}>{plant.name}</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
