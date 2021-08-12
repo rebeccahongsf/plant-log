@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
-import { View, Text, FlatList, Button, Image, StyleSheet } from 'react-native';
+import { View, Text, Button, Image, StyleSheet, FlatList } from 'react-native';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import LogCardItem from '../components/LogCardItem';
@@ -54,41 +54,47 @@ export default function PlantDetailScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {plantDetail.imageUri ? (
-        <View>
-          <Image
-            source={{
-              uri: plantDetail.imageUri,
-            }}
-            style={styles.avatar}
-          />
-        </View>
-      ) : null}
-      <Text style={styles.name}>{plantDetail.name}</Text>
-      <Text style={styles.type}>{plantDetail.type}</Text>
-      <Text style={styles.date}>
-        Water every {plantDetail.frequency} {plantDetail.duration}
-      </Text>
-      <Button
-        title="Add Log"
-        onPress={() =>
-          navigation.navigate('AddLog', {
-            id: route.params.id,
-          })
-        }
-      />
-      <FlatList
-        data={plantLog}
-        renderItem={({ item }) => <LogCardItem log={item} />}
-        keyExtractor={(item) => item.id}
-      />
+      <View style={styles.header}>
+        {plantDetail.imageUri ? (
+          <View>
+            <Image
+              source={{
+                uri: plantDetail.imageUri,
+              }}
+              style={styles.avatar}
+            />
+          </View>
+        ) : null}
+        <Text style={styles.name}>{plantDetail.name}</Text>
+        <Text style={styles.type}>{plantDetail.type}</Text>
+        <Text style={styles.date}>
+          Water every {plantDetail.frequency} {plantDetail.duration}
+        </Text>
+        <Button
+          title="Add Log"
+          onPress={() =>
+            navigation.navigate('AddLog', {
+              id: route.params.id,
+            })
+          }
+        />
+      </View>
+      <View style={styles.list}>
+        <FlatList
+          data={plantLog}
+          renderItem={({ item }) => <LogCardItem log={item} />}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
+    position: 'relative',
+    height: '100%',
+    width: '100%',
   },
   avatar: {
     width: '100%',
@@ -112,4 +118,19 @@ const styles = StyleSheet.create({
     padding: 5,
     width: '100%',
   },
+  header: {
+    padding: 30,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    width: '100%',
+    maxWidth: '100%',
+    zIndex: 1,
+    position: 'absolute',
+  },
+  list: {
+    paddingTop: 150,
+    zIndex: 0,
+    height: '100%',
+  }
 });

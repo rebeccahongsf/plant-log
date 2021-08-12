@@ -6,16 +6,28 @@ import styles from './styles';
 const LogCardItem = (props) => {
   const { log } = props;
 
-  var date = new Date(log.date).toLocaleDateString('en', {
-    year: 'numeric',
-    month: 'long',
+  var month = new Date(log.date).toLocaleDateString('en', {
+    month: 'short',
+  });
+
+  var day = new Date(log.date).toLocaleDateString('en', {
     day: 'numeric',
   });
 
+  var year = new Date(log.date).toLocaleDateString('en', {
+    year: 'numeric',
+  });
+
   return (
-    <View>
-      <Text>{date}</Text>
-      <Text>{log.note}</Text>
+    <View style={styles.container}>
+      <View  style={styles.left}>
+        <Text style={styles.month}>{month}</Text>
+        <Text style={styles.day}>{day}</Text>
+        <Text style={styles.year}>{year}</Text>
+      </View>
+      <View style={styles.right}>
+        <Text style={styles.note}>{log.note}</Text>
+      </View>
     </View>
   );
 };
