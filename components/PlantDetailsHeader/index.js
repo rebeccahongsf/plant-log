@@ -5,6 +5,7 @@ import styles from './styles';
 
 const PlantDetailsHeader = ({ props }) => {
   const navigation = useNavigation();
+  const route = useRoute();
 
   return (
     <View style={styles.header}>

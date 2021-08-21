@@ -61,6 +61,8 @@ export default function PlantDetailScreen({ navigation }) {
         data={plantLog}
         renderItem={({ item }) => <LogCardItem log={item} />}
         keyExtractor={(item) => item.id}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
