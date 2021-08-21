@@ -34,8 +34,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#ddd',
     flex: 1,
-    alignSelf:'stretch'
-  }
+    alignSelf: 'stretch',
+  },
+  time: {
+    color: '#5a5a5a',
+    marginLeft: 'auto',
+    marginTop: 'auto',
+  },
 });
 
 export default styles;

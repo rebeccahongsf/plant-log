@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
-import { View, Text, Button, Image, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import LogCardItem from '../components/LogCardItem';
+import PlantDetailsHeader from '../components/PlantDetailsHeader';
 
 export default function PlantDetailScreen({ navigation }) {
   const route = useRoute();
@@ -54,38 +55,13 @@ export default function PlantDetailScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        {plantDetail.imageUri ? (
-          <View>
-            <Image
-              source={{
-                uri: plantDetail.imageUri,
-              }}
-              style={styles.avatar}
-            />
-          </View>
-        ) : null}
-        <Text style={styles.name}>{plantDetail.name}</Text>
-        <Text style={styles.type}>{plantDetail.type}</Text>
-        <Text style={styles.date}>
-          Water every {plantDetail.frequency} {plantDetail.duration}
-        </Text>
-        <Button
-          title="Add Log"
-          onPress={() =>
-            navigation.navigate('AddLog', {
-              id: route.params.id,
-            })
-          }
-        />
-      </View>
-      <View style={styles.list}>
-        <FlatList
-          data={plantLog}
-          renderItem={({ item }) => <LogCardItem log={item} />}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
+      <FlatList
+        ListHeaderComponent={<PlantDetailsHeader props={plantDetail} />}
+        stickyHeaderIndices={[0]}
+        data={plantLog}
+        renderItem={({ item }) => <LogCardItem log={item} />}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 }
@@ -96,41 +72,9 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  avatar: {
-    width: '100%',
-    height: 250,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  name: {
-    fontWeight: 'bold',
-    fontSize: 22,
-  },
-  type: {
-    fontStyle: 'italic',
-  },
-  date: {
-    fontSize: 14,
-    color: 'grey',
-  },
-  button: {
-    backgroundColor: '#ccc',
-    padding: 5,
-    width: '100%',
-  },
-  header: {
-    padding: 30,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    width: '100%',
-    maxWidth: '100%',
-    zIndex: 1,
-    position: 'absolute',
-  },
   list: {
     paddingTop: 150,
     zIndex: 0,
     height: '100%',
-  }
+  },
 });
